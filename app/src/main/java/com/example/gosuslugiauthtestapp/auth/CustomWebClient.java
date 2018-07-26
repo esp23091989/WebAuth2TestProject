@@ -1,10 +1,12 @@
 package com.example.gosuslugiauthtestapp.auth;
 
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Message;
 import android.view.KeyEvent;
 import android.webkit.ClientCertRequest;
+import android.webkit.CookieManager;
 import android.webkit.HttpAuthHandler;
 import android.webkit.RenderProcessGoneDetail;
 import android.webkit.SafeBrowsingResponse;
@@ -14,6 +16,9 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * Created by Юленька on 24.07.2018.
@@ -28,6 +33,26 @@ public class CustomWebClient extends WebViewClient {
 
     @Override
     public void onPageFinished(WebView view, String url) {
+        CookieManager  cookieManager = CookieManager.getInstance();
+        try {
+            URL url1 = new URL(url);
+            String cookie = cookieManager.getCookie(url1.getHost());
+            String[] pairs = cookie.split(";");
+            for (int i = 0; i < pairs.length; ++i) {
+                String[] parts = pairs[i].split("=", 2);
+                String[] parts1 = pairs[i].split("=", 2);
+                // If token is found, return it to the calling activity.
+//                if (parts.length == 2 &&
+//                        parts[0].equalsIgnoreCase("oauth_token")) {
+//                    Intent result = new Intent();
+//                    result.putExtra("token", parts[1]);
+//                    setResult(RESULT_OK, result);
+//                    finish();
+//                }
+            }
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
         super.onPageFinished(view, url);
     }
 
@@ -71,7 +96,7 @@ public class CustomWebClient extends WebViewClient {
     @Override
     public void onTooManyRedirects(WebView view, Message cancelMsg, Message continueMsg) {
         super.onTooManyRedirects(view, cancelMsg, continueMsg);
-        https://ecp-test.miacugra.ru/esia/Home/EsiaPage?data=yuwD709Ehh0HPhfWod21ttoGWTuSGt5uV2BDu0sczP8qNPu4-qoOi20EmuiKkUfN8lz-pplCLhKuA7pFwtvZSTsLzJIu6fZpNDgMS-cM-AivwE2DdVPCg_0TO5ouqUFs6IzwgFVrVe2AsaGyxjo62N531ObsXWXSihdYKxczT57pDk-Jpw_tkVoKrjBSgaIchsrQ54fL0TFjLFLaeRZ-smHn6rM7BenqDVS_FPH6w0g&code=eyJ2ZXIiOjEsInR5cCI6IkpXVCIsInNidCI6ImF1dGhvcml6YXRpb25fY29kZSIsImFsZyI6IlJTMjU2In0.eyJuYmYiOjE1MzI0NDM4NDIsInNjb3BlIjoibW9iaWxlP29pZD0xMDAwMjk5NjU1IGtpZF9iaXJ0aF9jZXJ0X2RvYz9vaWQ9MTAwMDI5OTY1NSBnZW5kZXI_b2lkPTEwMDAyOTk2NTUgYmlydGhwbGFjZT9vaWQ9MTAwMDI5OTY1NSBraWRfZnVsbG5hbWU_b2lkPTEwMDAyOTk2NTUgYmlydGhkYXRlP29pZD0xMDAwMjk5NjU1IHNuaWxzP29pZD0xMDAwMjk5NjU1IGtpZF9zbmlscz9vaWQ9MTAwMDI5OTY1NSBmdWxsbmFtZT9vaWQ9MTAwMDI5OTY1NSBraWRfYmlydGhkYXRlP29pZD0xMDAwMjk5NjU1IGVtYWlsP29pZD0xMDAwMjk5NjU1IGlkX2RvYz9vaWQ9MTAwMDI5OTY1NSBraWRfZ2VuZGVyP29pZD0xMDAwMjk5NjU1IiwiYXV0aF90aW1lIjoxNTMyNDQzNTU3LCJpc3MiOiJodHRwOlwvXC9lc2lhLmdvc3VzbHVnaS5ydVwvIiwidXJuOmVzaWE6c2lkIjoiODM0M2I4OTVlODkzMWQwMGQ1YWQ1OGExMDY5ODkwYTM1MjEzZGYxOTdmYjBiNGRhNDlkODRhMzEzNGYyMzIwMiIsInVybjplc2lhOmNsaWVudDpzdGF0ZSI6IjQ1OTYzNzcyLWU4OGQtNGZiZi05OGFiLTFjZWVkODY4YzI3YyIsImF1dGhfbXRoZCI6IlBXRCIsInVybjplc2lhOnNiaiI6eyJ1cm46ZXNpYTpzYmo6dHlwIjoiUCIsInVybjplc2lhOnNiajppc190cnUiOnRydWUsInVybjplc2lhOnNiajpvaWQiOjEwMDAyOTk2NTUsInVybjplc2lhOnNiajpuYW0iOiJPSUQuMTAwMDI5OTY1NSIsInVybjplc2lhOnNiajplaWQiOjc0MTQ1NjN9LCJleHAiOjE1MzI0NDQwODIsInBhcmFtcyI6e30sImlhdCI6MTUzMjQ0Mzg0MiwiY2xpZW50X2lkIjoiMDA0MzA2ODYxIn0.XkFI94cG8s8psAfIar4TsrWpqgKriBQRevebh7T6tz_J45rak0JMmN7cNxHu-ja0kajGMeBzBPpbxlthWAMhqR3GlbItQXWjmi8ZWxtWeHemxPyemJ0QkvqeDA1lugEOHO3z5J7id1oCrnGP2YgSfLw8Sd3VFgU7WJMpxAoIFBiDOgYa-HQMpeSYGkkX59hDktmSn5iiLoEWRg5liPB51JqbCkceDEkKgk8CNFhD-0oQ7b-DV-qVmYnMZ6U0O-LEm9V0b1aD3ICxxg5CILPRPKLFCaXo4DDlfVBCugpWDO0Kmgu7LzWwJ4nogZxJGnF8LwkKuVaIf5Qes6aiU5Adgg&state=45963772-e88d-4fbf-98ab-1ceed868c27chttps://ecp-test.miacugra.ru/esia/Home/EsiaPage?data=yuwD709Ehh0HPhfWod21ttoGWTuSGt5uV2BDu0sczP8qNPu4-qoOi20EmuiKkUfN8lz-pplCLhKuA7pFwtvZSTsLzJIu6fZpNDgMS-cM-AivwE2DdVPCg_0TO5ouqUFs6IzwgFVrVe2AsaGyxjo62N531ObsXWXSihdYKxczT57pDk-Jpw_tkVoKrjBSgaIchsrQ54fL0TFjLFLaeRZ-smHn6rM7BenqDVS_FPH6w0g&code=eyJ2ZXIiOjEsInR5cCI6IkpXVCIsInNidCI6ImF1dGhvcml6YXRpb25fY29kZSIsImFsZyI6IlJTMjU2In0.eyJuYmYiOjE1MzI0NDM4NDIsInNjb3BlIjoibW9iaWxlP29pZD0xMDAwMjk5NjU1IGtpZF9iaXJ0aF9jZXJ0X2RvYz9vaWQ9MTAwMDI5OTY1NSBnZW5kZXI_b2lkPTEwMDAyOTk2NTUgYmlydGhwbGFjZT9vaWQ9MTAwMDI5OTY1NSBraWRfZnVsbG5hbWU_b2lkPTEwMDAyOTk2NTUgYmlydGhkYXRlP29pZD0xMDAwMjk5NjU1IHNuaWxzP29pZD0xMDAwMjk5NjU1IGtpZF9zbmlscz9vaWQ9MTAwMDI5OTY1NSBmdWxsbmFtZT9vaWQ9MTAwMDI5OTY1NSBraWRfYmlydGhkYXRlP29pZD0xMDAwMjk5NjU1IGVtYWlsP29pZD0xMDAwMjk5NjU1IGlkX2RvYz9vaWQ9MTAwMDI5OTY1NSBraWRfZ2VuZGVyP29pZD0xMDAwMjk5NjU1IiwiYXV0aF90aW1lIjoxNTMyNDQzNTU3LCJpc3MiOiJodHRwOlwvXC9lc2lhLmdvc3VzbHVnaS5ydVwvIiwidXJuOmVzaWE6c2lkIjoiODM0M2I4OTVlODkzMWQwMGQ1YWQ1OGExMDY5ODkwYTM1MjEzZGYxOTdmYjBiNGRhNDlkODRhMzEzNGYyMzIwMiIsInVybjplc2lhOmNsaWVudDpzdGF0ZSI6IjQ1OTYzNzcyLWU4OGQtNGZiZi05OGFiLTFjZWVkODY4YzI3YyIsImF1dGhfbXRoZCI6IlBXRCIsInVybjplc2lhOnNiaiI6eyJ1cm46ZXNpYTpzYmo6dHlwIjoiUCIsInVybjplc2lhOnNiajppc190cnUiOnRydWUsInVybjplc2lhOnNiajpvaWQiOjEwMDAyOTk2NTUsInVybjplc2lhOnNiajpuYW0iOiJPSUQuMTAwMDI5OTY1NSIsInVybjplc2lhOnNiajplaWQiOjc0MTQ1NjN9LCJleHAiOjE1MzI0NDQwODIsInBhcmFtcyI6e30sImlhdCI6MTUzMjQ0Mzg0MiwiY2xpZW50X2lkIjoiMDA0MzA2ODYxIn0.XkFI94cG8s8psAfIar4TsrWpqgKriBQRevebh7T6tz_J45rak0JMmN7cNxHu-ja0kajGMeBzBPpbxlthWAMhqR3GlbItQXWjmi8ZWxtWeHemxPyemJ0QkvqeDA1lugEOHO3z5J7id1oCrnGP2YgSfLw8Sd3VFgU7WJMpxAoIFBiDOgYa-HQMpeSYGkkX59hDktmSn5iiLoEWRg5liPB51JqbCkceDEkKgk8CNFhD-0oQ7b-DV-qVmYnMZ6U0O-LEm9V0b1aD3ICxxg5CILPRPKLFCaXo4DDlfVBCugpWDO0Kmgu7LzWwJ4nogZxJGnF8LwkKuVaIf5Qes6aiU5Adgg&state=45963772-e88d-4fbf-98ab-1ceed868c27c
+//        https://ecp-test.miacugra.ru/esia/Home/EsiaPage?data=yuwD709Ehh0HPhfWod21ttoGWTuSGt5uV2BDu0sczP8qNPu4-qoOi20EmuiKkUfN8lz-pplCLhKuA7pFwtvZSTsLzJIu6fZpNDgMS-cM-AivwE2DdVPCg_0TO5ouqUFs6IzwgFVrVe2AsaGyxjo62N531ObsXWXSihdYKxczT57pDk-Jpw_tkVoKrjBSgaIchsrQ54fL0TFjLFLaeRZ-smHn6rM7BenqDVS_FPH6w0g&code=eyJ2ZXIiOjEsInR5cCI6IkpXVCIsInNidCI6ImF1dGhvcml6YXRpb25fY29kZSIsImFsZyI6IlJTMjU2In0.eyJuYmYiOjE1MzI0NDM4NDIsInNjb3BlIjoibW9iaWxlP29pZD0xMDAwMjk5NjU1IGtpZF9iaXJ0aF9jZXJ0X2RvYz9vaWQ9MTAwMDI5OTY1NSBnZW5kZXI_b2lkPTEwMDAyOTk2NTUgYmlydGhwbGFjZT9vaWQ9MTAwMDI5OTY1NSBraWRfZnVsbG5hbWU_b2lkPTEwMDAyOTk2NTUgYmlydGhkYXRlP29pZD0xMDAwMjk5NjU1IHNuaWxzP29pZD0xMDAwMjk5NjU1IGtpZF9zbmlscz9vaWQ9MTAwMDI5OTY1NSBmdWxsbmFtZT9vaWQ9MTAwMDI5OTY1NSBraWRfYmlydGhkYXRlP29pZD0xMDAwMjk5NjU1IGVtYWlsP29pZD0xMDAwMjk5NjU1IGlkX2RvYz9vaWQ9MTAwMDI5OTY1NSBraWRfZ2VuZGVyP29pZD0xMDAwMjk5NjU1IiwiYXV0aF90aW1lIjoxNTMyNDQzNTU3LCJpc3MiOiJodHRwOlwvXC9lc2lhLmdvc3VzbHVnaS5ydVwvIiwidXJuOmVzaWE6c2lkIjoiODM0M2I4OTVlODkzMWQwMGQ1YWQ1OGExMDY5ODkwYTM1MjEzZGYxOTdmYjBiNGRhNDlkODRhMzEzNGYyMzIwMiIsInVybjplc2lhOmNsaWVudDpzdGF0ZSI6IjQ1OTYzNzcyLWU4OGQtNGZiZi05OGFiLTFjZWVkODY4YzI3YyIsImF1dGhfbXRoZCI6IlBXRCIsInVybjplc2lhOnNiaiI6eyJ1cm46ZXNpYTpzYmo6dHlwIjoiUCIsInVybjplc2lhOnNiajppc190cnUiOnRydWUsInVybjplc2lhOnNiajpvaWQiOjEwMDAyOTk2NTUsInVybjplc2lhOnNiajpuYW0iOiJPSUQuMTAwMDI5OTY1NSIsInVybjplc2lhOnNiajplaWQiOjc0MTQ1NjN9LCJleHAiOjE1MzI0NDQwODIsInBhcmFtcyI6e30sImlhdCI6MTUzMjQ0Mzg0MiwiY2xpZW50X2lkIjoiMDA0MzA2ODYxIn0.XkFI94cG8s8psAfIar4TsrWpqgKriBQRevebh7T6tz_J45rak0JMmN7cNxHu-ja0kajGMeBzBPpbxlthWAMhqR3GlbItQXWjmi8ZWxtWeHemxPyemJ0QkvqeDA1lugEOHO3z5J7id1oCrnGP2YgSfLw8Sd3VFgU7WJMpxAoIFBiDOgYa-HQMpeSYGkkX59hDktmSn5iiLoEWRg5liPB51JqbCkceDEkKgk8CNFhD-0oQ7b-DV-qVmYnMZ6U0O-LEm9V0b1aD3ICxxg5CILPRPKLFCaXo4DDlfVBCugpWDO0Kmgu7LzWwJ4nogZxJGnF8LwkKuVaIf5Qes6aiU5Adgg&state=45963772-e88d-4fbf-98ab-1ceed868c27chttps://ecp-test.miacugra.ru/esia/Home/EsiaPage?data=yuwD709Ehh0HPhfWod21ttoGWTuSGt5uV2BDu0sczP8qNPu4-qoOi20EmuiKkUfN8lz-pplCLhKuA7pFwtvZSTsLzJIu6fZpNDgMS-cM-AivwE2DdVPCg_0TO5ouqUFs6IzwgFVrVe2AsaGyxjo62N531ObsXWXSihdYKxczT57pDk-Jpw_tkVoKrjBSgaIchsrQ54fL0TFjLFLaeRZ-smHn6rM7BenqDVS_FPH6w0g&code=eyJ2ZXIiOjEsInR5cCI6IkpXVCIsInNidCI6ImF1dGhvcml6YXRpb25fY29kZSIsImFsZyI6IlJTMjU2In0.eyJuYmYiOjE1MzI0NDM4NDIsInNjb3BlIjoibW9iaWxlP29pZD0xMDAwMjk5NjU1IGtpZF9iaXJ0aF9jZXJ0X2RvYz9vaWQ9MTAwMDI5OTY1NSBnZW5kZXI_b2lkPTEwMDAyOTk2NTUgYmlydGhwbGFjZT9vaWQ9MTAwMDI5OTY1NSBraWRfZnVsbG5hbWU_b2lkPTEwMDAyOTk2NTUgYmlydGhkYXRlP29pZD0xMDAwMjk5NjU1IHNuaWxzP29pZD0xMDAwMjk5NjU1IGtpZF9zbmlscz9vaWQ9MTAwMDI5OTY1NSBmdWxsbmFtZT9vaWQ9MTAwMDI5OTY1NSBraWRfYmlydGhkYXRlP29pZD0xMDAwMjk5NjU1IGVtYWlsP29pZD0xMDAwMjk5NjU1IGlkX2RvYz9vaWQ9MTAwMDI5OTY1NSBraWRfZ2VuZGVyP29pZD0xMDAwMjk5NjU1IiwiYXV0aF90aW1lIjoxNTMyNDQzNTU3LCJpc3MiOiJodHRwOlwvXC9lc2lhLmdvc3VzbHVnaS5ydVwvIiwidXJuOmVzaWE6c2lkIjoiODM0M2I4OTVlODkzMWQwMGQ1YWQ1OGExMDY5ODkwYTM1MjEzZGYxOTdmYjBiNGRhNDlkODRhMzEzNGYyMzIwMiIsInVybjplc2lhOmNsaWVudDpzdGF0ZSI6IjQ1OTYzNzcyLWU4OGQtNGZiZi05OGFiLTFjZWVkODY4YzI3YyIsImF1dGhfbXRoZCI6IlBXRCIsInVybjplc2lhOnNiaiI6eyJ1cm46ZXNpYTpzYmo6dHlwIjoiUCIsInVybjplc2lhOnNiajppc190cnUiOnRydWUsInVybjplc2lhOnNiajpvaWQiOjEwMDAyOTk2NTUsInVybjplc2lhOnNiajpuYW0iOiJPSUQuMTAwMDI5OTY1NSIsInVybjplc2lhOnNiajplaWQiOjc0MTQ1NjN9LCJleHAiOjE1MzI0NDQwODIsInBhcmFtcyI6e30sImlhdCI6MTUzMjQ0Mzg0MiwiY2xpZW50X2lkIjoiMDA0MzA2ODYxIn0.XkFI94cG8s8psAfIar4TsrWpqgKriBQRevebh7T6tz_J45rak0JMmN7cNxHu-ja0kajGMeBzBPpbxlthWAMhqR3GlbItQXWjmi8ZWxtWeHemxPyemJ0QkvqeDA1lugEOHO3z5J7id1oCrnGP2YgSfLw8Sd3VFgU7WJMpxAoIFBiDOgYa-HQMpeSYGkkX59hDktmSn5iiLoEWRg5liPB51JqbCkceDEkKgk8CNFhD-0oQ7b-DV-qVmYnMZ6U0O-LEm9V0b1aD3ICxxg5CILPRPKLFCaXo4DDlfVBCugpWDO0Kmgu7LzWwJ4nogZxJGnF8LwkKuVaIf5Qes6aiU5Adgg&state=45963772-e88d-4fbf-98ab-1ceed868c27c
     }
 
     @Override
