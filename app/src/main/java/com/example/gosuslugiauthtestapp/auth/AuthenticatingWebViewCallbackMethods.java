@@ -18,8 +18,8 @@ import com.example.gosuslugiauthtestapp.auth.model.AuthDataDTO;
 import java.util.HashMap;
 
 /**
- * This interface defines the callback functions that AuthenticatingWebView.java will execute in MainActivity.java,
- * since the MainActivity handles displaying results on the screen, and AuthenticatingWebView makes asynchronous http
+ * This interface defines the callback functions that AuthenticatingWebView.java will execute in StartActivity.java,
+ * since the StartActivity handles displaying results on the screen, and AuthenticatingWebView makes asynchronous http
  * requests.
  */
 public interface AuthenticatingWebViewCallbackMethods {

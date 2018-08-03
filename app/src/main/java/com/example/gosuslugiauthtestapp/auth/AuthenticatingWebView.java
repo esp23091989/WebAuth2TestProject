@@ -53,7 +53,7 @@ public class AuthenticatingWebView {
      * Stores the webview and call back listener into class instance variables for later use.
      *
      * @param webView the WebView that is handling the authentication interaction with the user.
-     * @param listener handle to the callback methods to MainActivity.java.
+     * @param listener handle to the callback methods to StartActivity.java.
      */
     public AuthenticatingWebView(final WebView webView, final AuthenticatingWebViewCallbackMethods listener) {
         this.webView = webView;
